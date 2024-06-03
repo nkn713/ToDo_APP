@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>ToDo App</h1>
+    <form action="{{ url_for('add') }}" method="POST">
+        <input type="text" name="task" placeholder="Enter new task">
+        <button type="submit">Add</button>
+    </form>
+    <ul>
+        {% for todo in todos %}
+            <li>
+                <span id="task-{{ todo[0] }}">{{ todo[1] }}</span>
+                <a href="#" onclick="editTask({{ todo[0] }})">Edit</a>
+                <a href="{{ url_for('delete', todo_id=todo[0]) }}">Delete</a>
+                <form id="edit-form-{{ todo[0] }}" action="{{ url_for('edit', todo_id=todo[0]) }}" method="POST" style="display:none;">
+                    <input type="text" name="task" value="{{ todo[1] }}">
+                    <button type="submit">Save</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function editTask(id) {
+            document.getElementById(`task-${id}`).style.display = 'none';
+            document.getElementById(`edit-form-${id}`).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
